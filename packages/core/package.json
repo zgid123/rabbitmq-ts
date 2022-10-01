@@ -1,7 +1,25 @@
 {
   "name": "@rabbitmq-ts/core",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "license": "MIT",
+  "directories": {
+    "lib": "lib"
+  },
+  "author": "Alpha",
+  "description": "Core package for @rabbitmq-ts",
+  "keywords": [
+    "rabbitmq",
+    "rabbitmq-ts",
+    "rabbitmq-js",
+    "rabbitmq-typescript",
+    "rabbitmq-javascript",
+    "rabbitmq-nodejs",
+    "rabbitmq-nestjs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:zgid123/rabbitmq-ts.git"
+  },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
