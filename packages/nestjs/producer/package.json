@@ -1,0 +1,15 @@
+{
+  "name": "@rabbitmq-ts/nestjs-producer",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "prepublish": "rm -rf lib && tsc",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@nestjs/common": "^9.1.2",
+    "@rabbitmq-ts/core": "workspace:^1.0.0"
+  }
+}
