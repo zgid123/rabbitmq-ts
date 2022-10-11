@@ -1,16 +1,30 @@
 NestJS's Dynamic Module for Producer.
 
+# Install
+
+```sh
+npm install --save @rabbitmq-ts/nestjs-producer
+
+# or
+
+yarn add @rabbitmq-ts/nestjs-producer
+
+# or
+
+pnpm add @rabbitmq-ts/nestjs-producer
+```
+
 # Usage
 
 ```ts
 // test.module.ts
 import { Module } from '@nestjs/common';
-import { RabbitMQModule } from '@rabbitmq-ts/nestjs-producer';
+import { RabbitMQProducer } from '@rabbitmq-ts/nestjs-producer';
 import { TestController } from './test.controller.ts';
 
 @Module({
   imports: [
-    RabbitMQModule.register({
+    RabbitMQProducer.register({
       host: process.env.RABBITMQ_HOST,
       port: process.env.RABBITMQ_PORT,
       username: process.env.RABBITMQ_USERNAME,
@@ -38,7 +52,7 @@ export class TestModule {}
 ```ts
 // test.controller.ts
 import { Get, Controller } from '@nestjs/common';
-import { RabbitMQModel } from '@rabbitmq-ts/nestjs-client';
+import { RabbitMQModel } from '@rabbitmq-ts/nestjs-producer';
 
 @Controller()
 export class TestController {
@@ -46,7 +60,7 @@ export class TestController {
 
   @Get('/')
   public async get(): Promise<string> {
-    this.rabbitMQModel.publish('exchange_name', 'routingKey', {
+    this.rabbitMQModel.publish('exchange_name', 'routing_key', {
       message: 'test message',
     });
 

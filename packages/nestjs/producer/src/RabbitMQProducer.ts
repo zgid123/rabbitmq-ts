@@ -1,7 +1,12 @@
 import { Connection } from '@rabbitmq-ts/core';
 import { DynamicModule, Module } from '@nestjs/common';
 
-import type { ChannelWrapper, TAssertExchange } from '@rabbitmq-ts/core';
+import type { IConnectionStringProps } from '@rabbitmq-ts/core';
+import type {
+  ChannelWrapper,
+  TAssertExchange,
+  AmqpConnectionManagerOptions,
+} from '@rabbitmq-ts/core';
 
 import { CHANNEL_WRAPPER } from './constants';
 import { RabbitMQModel } from './RabbitMQModel';
@@ -11,6 +16,7 @@ type TExchangeBaseType = 'direct' | 'topic' | 'headers' | 'fanout' | 'match';
 type TExchangeType = TExchangeBaseType | Omit<string, TExchangeBaseType>;
 
 interface IBaseRegisterParams {
+  connectionOptions?: AmqpConnectionManagerOptions;
   configurations?: {
     exchanges?: {
       exchange: string;
@@ -33,20 +39,22 @@ interface IRegisterWithAtomParams extends IBaseRegisterParams {
 }
 
 @Module({})
-export class RabbitMQModule {
-  static register({
+export class RabbitMQProducer {
+  public static register({
     host,
     port,
     username,
     password,
     virtualHost,
     configurations,
+    connectionOptions,
   }: IRegisterWithAtomParams): DynamicModule;
-  static register({
+  public static register({
     uri,
     configurations,
+    connectionOptions,
   }: IRegisterWithUriParams): DynamicModule;
-  static register({
+  public static register({
     uri,
     host,
     port,
@@ -54,11 +62,12 @@ export class RabbitMQModule {
     password,
     virtualHost,
     configurations = {},
+    connectionOptions = {},
   }: IRegisterWithAtomParams & IRegisterWithUriParams): DynamicModule {
     const { exchanges = [] } = configurations;
 
     return {
-      module: RabbitMQModule,
+      module: RabbitMQProducer,
       providers: [
         {
           provide: CHANNEL_WRAPPER,
@@ -70,7 +79,8 @@ export class RabbitMQModule {
               username,
               password,
               virtualHost,
-            } as IRegisterWithAtomParams);
+              ...connectionOptions,
+            } as IConnectionStringProps);
 
             const channel = connection.createChannel();
 

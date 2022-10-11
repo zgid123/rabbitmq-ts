@@ -23,8 +23,9 @@ export class Connection {
     username,
     password,
     virtualHost,
+    ...options
   }: IConnectionStringAtomProps);
-  constructor({ uri }: IConnectionStringProps);
+  constructor({ uri, ...options }: IConnectionStringProps);
   constructor({
     uri,
     host,
@@ -32,6 +33,7 @@ export class Connection {
     username,
     password,
     virtualHost,
+    ...options
   }: IConnectionStringProps & IConnectionStringAtomProps) {
     if (!uri) {
       uri = combine(
@@ -50,7 +52,7 @@ export class Connection {
     }
 
     this.#uri = uri;
-    this.#amqpConnectionManager = connect([uri]);
+    this.#amqpConnectionManager = connect([uri], options);
   }
 
   public get connection(): AmqpConnectionManager {
@@ -69,5 +71,9 @@ export class Connection {
       json,
       ...rest,
     });
+  }
+
+  public close(): Promise<void> {
+    return this.#amqpConnectionManager.close();
   }
 }

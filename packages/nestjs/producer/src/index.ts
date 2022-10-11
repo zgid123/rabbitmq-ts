@@ -1,2 +1,2 @@
 export * from './RabbitMQModel';
-export * from './RabbitMQModule';
+export * from './RabbitMQProducer';

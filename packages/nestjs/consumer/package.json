@@ -1,12 +1,12 @@
 {
-  "name": "@rabbitmq-ts/core",
+  "name": "@rabbitmq-ts/nestjs-consumer",
   "version": "1.0.4",
   "license": "MIT",
   "directories": {
     "lib": "lib"
   },
   "author": "Alpha",
-  "description": "Core package for @rabbitmq-ts",
+  "description": "NestJS package for consumer",
   "homepage": "https://github.com/zgid123/rabbitmq-ts",
   "keywords": [
     "rabbitmq",
@@ -15,7 +15,8 @@
     "rabbitmq-typescript",
     "rabbitmq-javascript",
     "rabbitmq-nodejs",
-    "rabbitmq-nestjs"
+    "rabbitmq-nestjs",
+    "rabbitmq-consumer"
   ],
   "repository": {
     "type": "git",
@@ -28,10 +29,11 @@
     "build": "tsc"
   },
   "dependencies": {
-    "amqp-connection-manager": "^4.1.7",
-    "amqplib": "^0.10.3"
-  },
-  "devDependencies": {
-    "@types/amqplib": "^0.8.2"
+    "@nestjs/common": "^9.1.4",
+    "@nestjs/core": "^9.1.4",
+    "@nestjs/microservices": "^9.1.4",
+    "@rabbitmq-ts/core": "workspace:^1.0.4",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.5.7"
   }
 }

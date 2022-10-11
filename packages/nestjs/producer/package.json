@@ -1,12 +1,13 @@
 {
   "name": "@rabbitmq-ts/nestjs-producer",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "license": "MIT",
   "directories": {
     "lib": "lib"
   },
   "author": "Alpha",
   "description": "NestJS package for producer",
+  "homepage": "https://github.com/zgid123/rabbitmq-ts",
   "keywords": [
     "rabbitmq",
     "rabbitmq-ts",
@@ -14,11 +15,12 @@
     "rabbitmq-typescript",
     "rabbitmq-javascript",
     "rabbitmq-nodejs",
-    "rabbitmq-nestjs"
+    "rabbitmq-nestjs",
+    "rabbitmq-producer"
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:zgid123/rabbitmq-ts.git"
+    "url": "git+https://github.com/zgid123/rabbitmq-ts"
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -27,7 +29,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@nestjs/common": "^9.1.2",
-    "@rabbitmq-ts/core": "workspace:^1.0.3"
+    "@nestjs/common": "^9.1.4",
+    "@rabbitmq-ts/core": "workspace:^1.0.4"
   }
 }
