@@ -1,4 +1,8 @@
-import type { TConsumeOptions } from '@rabbitmq-ts/core';
+import type {
+  TAssertQueue,
+  TAssertExchange,
+  TConsumeOptions,
+} from '@rabbitmq-ts/core';
 
 const PATTERN_METADATA = 'microservices:pattern';
 const PATTERN_HANDLER_METADATA = 'microservices:handler_type';
@@ -7,13 +11,17 @@ type TExchangeBaseType = 'direct' | 'topic' | 'headers' | 'fanout' | 'match';
 
 type TExchangeType = TExchangeBaseType | Omit<string, TExchangeBaseType>;
 
-interface IExchangeProps {
+interface IExchangeProps extends Partial<TAssertExchange> {
   name: string;
   type?: TExchangeType;
 }
 
+interface IQueueProps extends Partial<TAssertQueue> {
+  name: string;
+}
+
 export interface ISubcribeParams {
-  queue: string;
+  queue: IQueueProps;
   routingKey?: string;
   exchange?: IExchangeProps;
   consumerOptions?: TConsumeOptions;

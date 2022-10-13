@@ -6,6 +6,7 @@ import type {
   CustomTransportStrategy,
 } from '@nestjs/microservices';
 import type {
+  Channel,
   TRepliesEmpty,
   ChannelWrapper,
   ConsumeMessage,
@@ -29,7 +30,8 @@ export class RabbitMQConsumer
   implements CustomTransportStrategy
 {
   #connection: Connection;
-  #channel: ChannelWrapper;
+  #patterns: ISubcribeParams[] = [];
+  #channel: ChannelWrapper | undefined;
 
   constructor({
     host,
@@ -69,10 +71,6 @@ export class RabbitMQConsumer
       ...options,
       ...connectionOptions,
     } as IConnectionStringAtomProps);
-
-    this.#channel = this.#connection.createChannel({
-      json: false,
-    });
   }
 
   public static createService({
@@ -105,45 +103,81 @@ export class RabbitMQConsumer
       pattern = omit(pattern, ['isRabbitMQ']) as ISubcribeParams & {
         isRabbitMQ: boolean;
       };
-      const { exchange, consumerOptions, queue, routingKey } = pattern;
-      const { name: exchangeName, type: exchangeType = 'direct' } =
-        exchange || {};
 
-      const prepareComsumers: Promise<
-        TRepliesAssertExchange | TRepliesEmpty | void
-      >[] = [];
-
-      if (exchangeName) {
-        prepareComsumers.push(
-          this.#channel.assertExchange(exchangeName, exchangeType as string),
-        );
-      }
-
-      if (routingKey) {
-        prepareComsumers.push(
-          this.#channel.bindQueue(queue, exchangeName || '', routingKey),
-        );
-      }
-
-      Promise.all([
-        this.#channel.assertQueue(queue),
-        ...prepareComsumers,
-        this.#channel.consume(
-          queue,
-          (message) => {
-            return this.#handleMessage(message, this.#channel, pattern);
-          },
-          consumerOptions,
-        ),
-      ]);
+      this.#patterns.push(pattern);
     }
 
     super.addHandler(pattern, callback, isEventHandler, extras);
   }
 
+  public listen(callback: TCallback) {
+    const patterns = this.#patterns;
+    const handleMessage = this.#handleMessage.bind(this);
+
+    this.#channel = this.#connection.createChannel({
+      json: false,
+      setup: function (channel: Channel) {
+        patterns.forEach(async (pattern) => {
+          const { exchange, consumerOptions, queue, routingKey } = pattern;
+          const { name: queueName, ...queueOptions } = queue;
+          const {
+            name: exchangeName,
+            type: exchangeType = 'direct',
+            ...exchangeOptions
+          } = exchange || {};
+
+          // must declare queue first
+          await channel.assertQueue(queueName, queueOptions);
+
+          const prepareComsumers: Promise<
+            TRepliesAssertExchange | TRepliesEmpty | void
+          >[] = [];
+
+          if (exchangeName) {
+            prepareComsumers.push(
+              channel.assertExchange(
+                exchangeName,
+                exchangeType as string,
+                exchangeOptions,
+              ),
+            );
+          }
+
+          if (routingKey) {
+            prepareComsumers.push(
+              channel.bindQueue(queueName, exchangeName || '', routingKey),
+            );
+          }
+
+          Promise.all([
+            ...prepareComsumers,
+            channel.consume(
+              queueName,
+              (message) => {
+                return handleMessage(
+                  message as ConsumeMessage,
+                  channel,
+                  pattern,
+                );
+              },
+              consumerOptions,
+            ),
+          ]);
+        });
+      },
+    });
+
+    callback();
+  }
+
+  public close() {
+    this.#channel?.close();
+    this.#connection.close();
+  }
+
   async #handleMessage(
     message: ConsumeMessage,
-    channel: ChannelWrapper,
+    channel: Channel,
     pattern: ISubcribeParams,
   ): Promise<void> {
     const { content } = message;
@@ -163,14 +197,5 @@ export class RabbitMQConsumer
     const rmqContext = new RmqContext([message, channel, patternAsString]);
 
     return this.handleEvent(patternAsString, packet, rmqContext);
-  }
-
-  public listen(callback: TCallback) {
-    callback();
-  }
-
-  public close() {
-    this.#channel.close();
-    this.#connection.close();
   }
 }

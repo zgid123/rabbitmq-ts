@@ -6,4 +6,3 @@ pnpm-workspace.yaml
 .husky
 .lintstagedrc
 .prettierrc
-README.md

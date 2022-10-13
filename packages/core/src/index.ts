@@ -5,13 +5,15 @@ export type TAssertExchange = Options.AssertExchange;
 
 export type TRepliesAssertExchange = Replies.AssertExchange;
 
+export type TAssertQueue = Options.AssertQueue;
+
 export type TRepliesEmpty = Replies.Empty;
 
 export type TPublish = ManagerOptions.Publish;
 
 export type TConsumeOptions = ManagerOptions.Consume;
 
-export type { ConsumeMessage } from 'amqplib';
+export type { Channel, ConsumeMessage } from 'amqplib';
 
 export type {
   ChannelWrapper,

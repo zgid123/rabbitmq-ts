@@ -38,12 +38,12 @@ importers:
     devDependencies:
       '@types/amqplib': 0.8.2
 
-  packages/nestjs/comsumer:
+  packages/nestjs/consumer:
     specifiers:
       '@nestjs/common': ^9.1.4
       '@nestjs/core': ^9.1.4
       '@nestjs/microservices': ^9.1.4
-      '@rabbitmq-ts/core': workspace:^1.0.4
+      '@rabbitmq-ts/core': workspace:^1.0.5
       reflect-metadata: ^0.1.13
       rxjs: ^7.5.7
     dependencies:
@@ -57,7 +57,7 @@ importers:
   packages/nestjs/producer:
     specifiers:
       '@nestjs/common': ^9.1.4
-      '@rabbitmq-ts/core': workspace:^1.0.4
+      '@rabbitmq-ts/core': workspace:^1.0.5
     dependencies:
       '@nestjs/common': 9.1.4
       '@rabbitmq-ts/core': link:../../core

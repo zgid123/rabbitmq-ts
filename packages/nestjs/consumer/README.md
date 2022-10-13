@@ -102,11 +102,16 @@ import type { RmqContext } from '@rabbitmq-ts/nestjs-consumer';
 @Controller()
 export class TestController {
   @Subcribe({
-    queue: 'queue_name',
     routingKey: 'routing_key',
+    queue: {
+      name: 'queue_name',
+      exclusive: true,
+      autoDelete: true,
+    },
     exchange: {
       name: 'exchange_name',
       type: 'topic',
+      durable: false,
     },
     consumerOptions: {
       noAck: true,
