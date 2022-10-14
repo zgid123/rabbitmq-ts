@@ -33,17 +33,16 @@ importers:
       amqp-connection-manager: ^4.1.7
       amqplib: ^0.10.3
     dependencies:
+      '@types/amqplib': 0.8.2
       amqp-connection-manager: 4.1.7_amqplib@0.10.3
       amqplib: 0.10.3
-    devDependencies:
-      '@types/amqplib': 0.8.2
 
   packages/nestjs/consumer:
     specifiers:
       '@nestjs/common': ^9.1.4
       '@nestjs/core': ^9.1.4
       '@nestjs/microservices': ^9.1.4
-      '@rabbitmq-ts/core': workspace:^1.0.5
+      '@rabbitmq-ts/core': workspace:^1.0.6
       reflect-metadata: ^0.1.13
       rxjs: ^7.5.7
     dependencies:
@@ -57,7 +56,7 @@ importers:
   packages/nestjs/producer:
     specifiers:
       '@nestjs/common': ^9.1.4
-      '@rabbitmq-ts/core': workspace:^1.0.5
+      '@rabbitmq-ts/core': workspace:^1.0.6
     dependencies:
       '@nestjs/common': 9.1.4
       '@rabbitmq-ts/core': link:../../core
@@ -270,20 +269,20 @@ packages:
     resolution: {integrity: sha512-p+TFLzo52f8UanB+Nq6gyUi65yecAcRY3nYowU6MPGFtaJvEDxcnFWrxssSTkF+ts1W3zyQDvgVICLQem5WxRA==}
     dependencies:
       '@types/bluebird': 3.5.37
-      '@types/node': 18.7.23
-    dev: true
+      '@types/node': 18.8.5
+    dev: false
 
   /@types/bluebird/3.5.37:
     resolution: {integrity: sha512-g2qEd+zkfkTEudA2SrMAeAvY7CrFqtbsLILm2dT2VIeKTqMqVzcdfURlvu6FU3srRgbmXN1Srm94pg34EIehww==}
-    dev: true
+    dev: false
 
   /@types/json-schema/7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
     dev: true
 
-  /@types/node/18.7.23:
-    resolution: {integrity: sha512-DWNcCHolDq0ZKGizjx2DZjR/PqsYwAcYUJmfMWqtVU2MBMG5Mo+xFZrhGId5r/O5HOuMPyQEcM6KUBp5lBZZBg==}
-    dev: true
+  /@types/node/18.8.5:
+    resolution: {integrity: sha512-Bq7G3AErwe5A/Zki5fdD3O6+0zDChhg671NfPjtIcbtzDNZTv4NPKMRFr7gtYPG7y+B8uTiNK4Ngd9T0FTar6Q==}
+    dev: false
 
   /@typescript-eslint/eslint-plugin/5.40.0_25sstg4uu2sk4pm7xcyzuov7xq:
     resolution: {integrity: sha512-FIBZgS3DVJgqPwJzvZTuH4HNsZhHMa9SjxTKAZTlMsPw/UzpEjcf9f4dfgDJEHjK+HboUJo123Eshl6niwEm/Q==}
