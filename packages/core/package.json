@@ -1,6 +1,6 @@
 {
   "name": "@rabbitmq-ts/core",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "license": "MIT",
   "directories": {
     "lib": "lib"
@@ -28,10 +28,8 @@
     "build": "tsc"
   },
   "dependencies": {
+    "@types/amqplib": "^0.8.2",
     "amqp-connection-manager": "^4.1.7",
     "amqplib": "^0.10.3"
-  },
-  "devDependencies": {
-    "@types/amqplib": "^0.8.2"
   }
 }
