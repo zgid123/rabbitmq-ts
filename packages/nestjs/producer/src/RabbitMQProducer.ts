@@ -1,7 +1,7 @@
 import { Connection } from '@rabbitmq-ts/core';
 import { Inject, Module } from '@nestjs/common';
 
-import type { IConnectionStringProps } from '@rabbitmq-ts/core';
+import type { Channel, IConnectionStringProps } from '@rabbitmq-ts/core';
 import type { OnApplicationShutdown, DynamicModule } from '@nestjs/common';
 import type {
   ChannelWrapper,
@@ -85,15 +85,17 @@ export class RabbitMQProducer implements OnApplicationShutdown {
               ...connectionOptions,
             } as IConnectionStringProps);
 
-            const channel = connection.createChannel();
-
-            await Promise.all(
-              exchanges.map(({ exchange, type, options }) => {
-                return Promise.all([
-                  channel.assertExchange(exchange, type as string, options),
-                ]);
-              }),
-            );
+            const channel = connection.createChannel({
+              setup: function (channel: Channel) {
+                Promise.all(
+                  exchanges.map(({ exchange, type, options }) => {
+                    return Promise.all([
+                      channel.assertExchange(exchange, type as string, options),
+                    ]);
+                  }),
+                );
+              },
+            });
 
             (channel as IChannelProps).connection = connection; // trick to close connection
 
