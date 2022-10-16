@@ -1,7 +1,8 @@
 import { Connection } from '@rabbitmq-ts/core';
-import { DynamicModule, Module } from '@nestjs/common';
+import { Inject, Module } from '@nestjs/common';
 
 import type { IConnectionStringProps } from '@rabbitmq-ts/core';
+import type { OnApplicationShutdown, DynamicModule } from '@nestjs/common';
 import type {
   ChannelWrapper,
   TAssertExchange,
@@ -10,6 +11,8 @@ import type {
 
 import { CHANNEL_WRAPPER } from './constants';
 import { RabbitMQModel } from './RabbitMQModel';
+
+import type { IChannelProps } from './RabbitMQModel';
 
 type TExchangeBaseType = 'direct' | 'topic' | 'headers' | 'fanout' | 'match';
 
@@ -39,7 +42,7 @@ interface IRegisterWithAtomParams extends IBaseRegisterParams {
 }
 
 @Module({})
-export class RabbitMQProducer {
+export class RabbitMQProducer implements OnApplicationShutdown {
   public static register({
     host,
     port,
@@ -92,6 +95,8 @@ export class RabbitMQProducer {
               }),
             );
 
+            (channel as IChannelProps).connection = connection; // trick to close connection
+
             return channel;
           },
         },
@@ -99,5 +104,14 @@ export class RabbitMQProducer {
       ],
       exports: [RabbitMQModel],
     };
+  }
+
+  constructor(
+    @Inject(CHANNEL_WRAPPER) private readonly channelWrapper: IChannelProps,
+  ) {}
+
+  // for jest test or other usages
+  public onApplicationShutdown(_signal: string) {
+    this.channelWrapper.connection.close();
   }
 }
