@@ -32,7 +32,7 @@
     }
   },
   "scripts": {
-    "prepublish": "build",
+    "prepublish": "pnpm build",
     "build": "rollup --config rollup.config.ts --configPlugin typescript"
   },
   "dependencies": {
