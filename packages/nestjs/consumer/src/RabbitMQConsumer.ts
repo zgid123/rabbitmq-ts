@@ -1,6 +1,5 @@
 import {
   Server,
-  RmqContext,
   type MessageHandler,
   type CustomTransportStrategy,
 } from '@nestjs/microservices';
@@ -16,6 +15,7 @@ import {
 } from '@rabbitmq-ts/core';
 
 import { omit } from './utils';
+import { RmqContext } from './Context';
 
 import type { ISubcribeParams } from './decorators';
 
