@@ -5,8 +5,10 @@
   "scripts": {
     "prepare": "husky install",
     "preinstall": "npx only-allow pnpm",
+    "clear": "pnpm -r exec -- rm -rf",
     "clear-node-modules": "pnpm -r exec -- rm -rf node_modules",
-    "update-packages": "pnpm update -i -r --latest"
+    "update-packages": "pnpm update -i -r --latest",
+    "build": "turbo run build"
   },
   "keywords": [
     "rabbitmq",
@@ -24,17 +26,23 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.40.0",
-    "@typescript-eslint/parser": "^5.40.0",
-    "eslint": "^8.25.0",
-    "eslint-config-prettier": "^8.5.0",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "husky": "^8.0.1",
-    "lint-staged": "^13.0.3",
-    "prettier": "^2.7.1",
-    "typescript": "^4.8.4"
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.0",
+    "prettier": "^2.8.7",
+    "rollup": "^3.20.2",
+    "turbo": "^1.8.6",
+    "typescript": "^5.0.2"
   },
   "dependencies": {
-    "tslib": "^2.4.0"
+    "tslib": "^2.5.0"
   }
 }

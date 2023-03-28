@@ -22,14 +22,22 @@
     "type": "git",
     "url": "git+https://github.com/zgid123/rabbitmq-ts"
   },
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "./lib/index.cjs",
+  "module": "./lib/index.mjs",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.cjs",
+      "types": "./lib/index.d.ts"
+    }
+  },
   "scripts": {
-    "prepublish": "rm -rf lib && tsc",
-    "build": "tsc"
+    "prepublish": "build",
+    "build": "rollup --config rollup.config.ts --configPlugin typescript"
   },
   "dependencies": {
-    "@nestjs/common": "^9.1.4",
+    "@nestjs/common": "^9.3.12",
     "@rabbitmq-ts/core": "workspace:^1.0.6"
   }
 }

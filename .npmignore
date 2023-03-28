@@ -6,3 +6,4 @@ pnpm-workspace.yaml
 .husky
 .lintstagedrc
 .prettierrc
+.turbo

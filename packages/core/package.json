@@ -21,15 +21,23 @@
     "type": "git",
     "url": "git+https://github.com/zgid123/rabbitmq-ts"
   },
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "./lib/index.cjs",
+  "module": "./lib/index.mjs",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.cjs",
+      "types": "./lib/index.d.ts"
+    }
+  },
   "scripts": {
-    "prepublish": "rm -rf lib && tsc",
-    "build": "tsc"
+    "prepublish": "build",
+    "build": "rollup --config rollup.config.ts --configPlugin typescript"
   },
   "dependencies": {
-    "@types/amqplib": "^0.8.2",
-    "amqp-connection-manager": "^4.1.7",
+    "@types/amqplib": "^0.10.1",
+    "amqp-connection-manager": "^4.1.11",
     "amqplib": "^0.10.3"
   }
 }

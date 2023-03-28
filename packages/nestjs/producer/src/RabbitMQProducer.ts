@@ -1,12 +1,16 @@
-import { Connection } from '@rabbitmq-ts/core';
-import { Inject, Module } from '@nestjs/common';
-
-import type { Channel, IConnectionStringProps } from '@rabbitmq-ts/core';
-import type { OnApplicationShutdown, DynamicModule } from '@nestjs/common';
-import type {
-  ChannelWrapper,
-  TAssertExchange,
-  AmqpConnectionManagerOptions,
+import {
+  Inject,
+  Module,
+  type DynamicModule,
+  type OnApplicationShutdown,
+} from '@nestjs/common';
+import {
+  Connection,
+  type Channel,
+  type ChannelWrapper,
+  type TAssertExchange,
+  type IConnectionStringProps,
+  type AmqpConnectionManagerOptions,
 } from '@rabbitmq-ts/core';
 
 import { CHANNEL_WRAPPER } from './constants';

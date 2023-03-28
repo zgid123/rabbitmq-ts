@@ -1,9 +1,8 @@
-import { connect } from 'amqp-connection-manager';
-
-import type {
-  ChannelWrapper,
-  CreateChannelOpts,
-  AmqpConnectionManager,
+import {
+  connect,
+  type ChannelWrapper,
+  type CreateChannelOpts,
+  type AmqpConnectionManager,
 } from 'amqp-connection-manager';
 
 import { combine } from './utils';

@@ -1,18 +1,18 @@
-import { Connection } from '@rabbitmq-ts/core';
-import { Server, RmqContext } from '@nestjs/microservices';
-
-import type {
-  MessageHandler,
-  CustomTransportStrategy,
+import {
+  Server,
+  RmqContext,
+  type MessageHandler,
+  type CustomTransportStrategy,
 } from '@nestjs/microservices';
-import type {
-  Channel,
-  TRepliesEmpty,
-  ChannelWrapper,
-  ConsumeMessage,
-  TRepliesAssertExchange,
-  IConnectionStringProps,
-  IConnectionStringAtomProps,
+import {
+  Connection,
+  type Channel,
+  type TRepliesEmpty,
+  type ChannelWrapper,
+  type ConsumeMessage,
+  type TRepliesAssertExchange,
+  type IConnectionStringProps,
+  type IConnectionStringAtomProps,
 } from '@rabbitmq-ts/core';
 
 import { omit } from './utils';
