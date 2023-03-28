@@ -18,3 +18,5 @@ yarn-error.log*
 *.js.map
 lib
 .turbo
+.env
+dist
