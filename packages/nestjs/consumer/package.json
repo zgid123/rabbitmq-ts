@@ -1,6 +1,6 @@
 {
   "name": "@rabbitmq-ts/nestjs-consumer",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "license": "MIT",
   "directories": {
     "lib": "lib"
@@ -40,7 +40,7 @@
     "@nestjs/common": "^9.3.12",
     "@nestjs/core": "^9.3.12",
     "@nestjs/microservices": "^9.3.12",
-    "@rabbitmq-ts/core": "workspace:^1.0.6",
+    "@rabbitmq-ts/core": "workspace:*",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0"
   }

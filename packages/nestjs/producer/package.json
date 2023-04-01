@@ -1,6 +1,6 @@
 {
   "name": "@rabbitmq-ts/nestjs-producer",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "license": "MIT",
   "directories": {
     "lib": "lib"
@@ -38,6 +38,6 @@
   },
   "dependencies": {
     "@nestjs/common": "^9.3.12",
-    "@rabbitmq-ts/core": "workspace:^1.0.6"
+    "@rabbitmq-ts/core": "workspace:*"
   }
 }
