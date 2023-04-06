@@ -14,11 +14,15 @@ async function bootstrap() {
 
   app.connectMicroservice(
     RabbitMQConsumer.createService({
-      host: process.env.RABBITMQ_HOST,
-      port: process.env.RABBITMQ_PORT,
-      username: process.env.RABBITMQ_USERNAME,
-      password: process.env.RABBITMQ_PASSWORD,
-      virtualHost: process.env.RABBITMQ_VIRTUAL_HOST,
+      urls: [
+        {
+          host: process.env.RABBITMQ_HOST,
+          port: process.env.RABBITMQ_PORT,
+          username: process.env.RABBITMQ_USERNAME,
+          password: process.env.RABBITMQ_PASSWORD,
+          virtualHost: process.env.RABBITMQ_VIRTUAL_HOST,
+        },
+      ],
     }),
   );
 

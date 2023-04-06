@@ -22,7 +22,4 @@ export type {
 
 export * from './Connection';
 
-export type {
-  IConnectionStringProps,
-  IConnectionStringAtomProps,
-} from './interface';
+export type { IConnectionProps } from './interface';

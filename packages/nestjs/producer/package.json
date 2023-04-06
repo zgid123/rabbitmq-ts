@@ -1,6 +1,6 @@
 {
   "name": "@rabbitmq-ts/nestjs-producer",
-  "version": "1.0.10",
+  "version": "2.0.0",
   "license": "MIT",
   "directories": {
     "lib": "lib"
@@ -37,7 +37,7 @@
     "build": "rollup --config rollup.config.ts --configPlugin typescript"
   },
   "dependencies": {
-    "@nestjs/common": "^9.3.12",
+    "@nestjs/common": "^9.4.0",
     "@rabbitmq-ts/core": "workspace:*"
   }
 }

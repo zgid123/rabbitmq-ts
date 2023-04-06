@@ -19,19 +19,22 @@ pnpm add @rabbitmq-ts/nestjs-consumer
 ```ts
 // main.ts
 import { NestFactory } from '@nestjs/core';
-import { RabbitMQService } from '@rabbitmq-ts/nestjs-consumer';
+import { RabbitMQConsumer } from '@rabbitmq-ts/nestjs-consumer';
+
 import { AppModule } from 'app.module';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
     {
-      strategy: new RabbitMQService({
-        host: process.env.RABBITMQ_HOST,
-        port: process.env.RABBITMQ_PORT,
-        username: process.env.RABBITMQ_USERNAME,
-        password: process.env.RABBITMQ_PASSWORD,
-        virtualHost: process.env.RABBITMQ_VIRTUAL_HOST,
+      strategy: new RabbitMQConsumer({
+        urls: {
+          host: process.env.RABBITMQ_HOST,
+          port: process.env.RABBITMQ_PORT,
+          username: process.env.RABBITMQ_USERNAME,
+          password: process.env.RABBITMQ_PASSWORD,
+          virtualHost: process.env.RABBITMQ_VIRTUAL_HOST,
+        },
       }),
     },
   );
@@ -45,18 +48,23 @@ bootstrap();
 ```ts
 // main.ts
 import { NestFactory } from '@nestjs/core';
-import { RabbitMQService } from '@rabbitmq-ts/nestjs-consumer';
+import { RabbitMQConsumer } from '@rabbitmq-ts/nestjs-consumer';
+
 import { AppModule } from 'app.module';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
-    RabbitMQService.createService({
-      host: process.env.RABBITMQ_HOST,
-      port: process.env.RABBITMQ_PORT,
-      username: process.env.RABBITMQ_USERNAME,
-      password: process.env.RABBITMQ_PASSWORD,
-      virtualHost: process.env.RABBITMQ_VIRTUAL_HOST,
+    RabbitMQConsumer.createService({
+      urls: [
+        {
+          host: process.env.RABBITMQ_HOST,
+          port: process.env.RABBITMQ_PORT,
+          username: process.env.RABBITMQ_USERNAME,
+          password: process.env.RABBITMQ_PASSWORD,
+          virtualHost: process.env.RABBITMQ_VIRTUAL_HOST,
+        },
+      ],
     }),
   );
 
@@ -69,14 +77,15 @@ bootstrap();
 ```ts
 // main.ts
 import { NestFactory } from '@nestjs/core';
-import { RabbitMQService } from '@rabbitmq-ts/nestjs-consumer';
+import { RabbitMQConsumer } from '@rabbitmq-ts/nestjs-consumer';
+
 import { AppModule } from 'app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.connectMicroservice(
-    RabbitMQService.createService({
+    RabbitMQConsumer.createService({
       host: process.env.RABBITMQ_HOST,
       port: process.env.RABBITMQ_PORT,
       username: process.env.RABBITMQ_USERNAME,

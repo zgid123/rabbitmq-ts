@@ -1,7 +1,6 @@
 import type { AmqpConnectionManagerOptions } from 'amqp-connection-manager';
 
-export interface IConnectionStringAtomProps
-  extends AmqpConnectionManagerOptions {
+export interface IConnectionAtomProps {
   host: string;
   username: string;
   password: string;
@@ -9,6 +8,6 @@ export interface IConnectionStringAtomProps
   port: number | string;
 }
 
-export interface IConnectionStringProps extends AmqpConnectionManagerOptions {
-  uri: string;
+export interface IConnectionProps extends AmqpConnectionManagerOptions {
+  urls: string | IConnectionAtomProps | (string | IConnectionAtomProps)[];
 }

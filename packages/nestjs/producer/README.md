@@ -20,16 +20,19 @@ pnpm add @rabbitmq-ts/nestjs-producer
 // test.module.ts
 import { Module } from '@nestjs/common';
 import { RabbitMQProducer } from '@rabbitmq-ts/nestjs-producer';
+
 import { TestController } from './test.controller.ts';
 
 @Module({
   imports: [
     RabbitMQProducer.register({
-      host: process.env.RABBITMQ_HOST,
-      port: process.env.RABBITMQ_PORT,
-      username: process.env.RABBITMQ_USERNAME,
-      password: process.env.RABBITMQ_PASSWORD,
-      virtualHost: process.env.RABBITMQ_VIRTUAL_HOST,
+      urls: {
+        host: process.env.RABBITMQ_HOST,
+        port: process.env.RABBITMQ_PORT,
+        username: process.env.RABBITMQ_USERNAME,
+        password: process.env.RABBITMQ_PASSWORD,
+        virtualHost: process.env.RABBITMQ_VIRTUAL_HOST,
+      },
       configurations: {
         exchanges: [
           {

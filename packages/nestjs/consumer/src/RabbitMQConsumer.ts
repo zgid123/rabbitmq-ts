@@ -9,9 +9,8 @@ import {
   type TRepliesEmpty,
   type ChannelWrapper,
   type ConsumeMessage,
+  type IConnectionProps,
   type TRepliesAssertExchange,
-  type IConnectionStringProps,
-  type IConnectionStringAtomProps,
 } from '@rabbitmq-ts/core';
 
 import { omit } from './utils';
@@ -33,63 +32,17 @@ export class RabbitMQConsumer
   #patterns: ISubcribeParams[] = [];
   #channel: ChannelWrapper | undefined;
 
-  constructor({
-    host,
-    port,
-    username,
-    password,
-    virtualHost,
-    ...connectionOptions
-  }: IConnectionStringAtomProps);
-  constructor({ uri, ...connectionOptions }: IConnectionStringProps);
-  constructor({
-    uri,
-    host,
-    port,
-    username,
-    password,
-    virtualHost,
-    ...connectionOptions
-  }: IConnectionStringProps & IConnectionStringAtomProps) {
+  constructor(props: IConnectionProps) {
     super();
 
-    let options: IConnectionStringProps | IConnectionStringAtomProps = {
-      uri,
-    };
-
-    if (!uri) {
-      options = {
-        host,
-        port,
-        username,
-        password,
-        virtualHost,
-      };
-    }
-
-    this.#connection = new Connection({
-      ...options,
-      ...connectionOptions,
-    } as IConnectionStringAtomProps);
+    this.#connection = new Connection(props);
   }
 
-  public static createService({
-    host,
-    port,
-    username,
-    password,
-    virtualHost,
-    ...connectionOptions
-  }: IConnectionStringAtomProps): ICreateServiceReturnProps;
-  public static createService({
-    uri,
-    ...connectionOptions
-  }: IConnectionStringProps): ICreateServiceReturnProps;
   public static createService(
-    params: IConnectionStringProps & IConnectionStringAtomProps,
+    params: IConnectionProps,
   ): ICreateServiceReturnProps {
     return {
-      strategy: new RabbitMQConsumer(params as IConnectionStringAtomProps),
+      strategy: new RabbitMQConsumer(params),
     };
   }
 

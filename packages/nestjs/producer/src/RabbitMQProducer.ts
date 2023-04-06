@@ -9,7 +9,7 @@ import {
   type Channel,
   type ChannelWrapper,
   type TAssertExchange,
-  type IConnectionStringProps,
+  type IConnectionProps,
   type AmqpConnectionManagerOptions,
 } from '@rabbitmq-ts/core';
 
@@ -22,7 +22,8 @@ type TExchangeBaseType = 'direct' | 'topic' | 'headers' | 'fanout' | 'match';
 
 type TExchangeType = TExchangeBaseType | Omit<string, TExchangeBaseType>;
 
-interface IBaseRegisterParams {
+interface IRegisterParams {
+  urls: IConnectionProps['urls'];
   connectionOptions?: AmqpConnectionManagerOptions;
   configurations?: {
     exchanges?: {
@@ -33,44 +34,13 @@ interface IBaseRegisterParams {
   };
 }
 
-interface IRegisterWithUriParams extends IBaseRegisterParams {
-  uri: string;
-}
-
-interface IRegisterWithAtomParams extends IBaseRegisterParams {
-  host: string;
-  username: string;
-  password: string;
-  virtualHost: string;
-  port: number | string;
-}
-
 @Module({})
 export class RabbitMQProducer implements OnApplicationShutdown {
   public static register({
-    host,
-    port,
-    username,
-    password,
-    virtualHost,
-    configurations,
-    connectionOptions,
-  }: IRegisterWithAtomParams): DynamicModule;
-  public static register({
-    uri,
-    configurations,
-    connectionOptions,
-  }: IRegisterWithUriParams): DynamicModule;
-  public static register({
-    uri,
-    host,
-    port,
-    username,
-    password,
-    virtualHost,
+    urls,
     configurations = {},
     connectionOptions = {},
-  }: IRegisterWithAtomParams & IRegisterWithUriParams): DynamicModule {
+  }: IRegisterParams): DynamicModule {
     const { exchanges = [] } = configurations;
 
     return {
@@ -80,14 +50,9 @@ export class RabbitMQProducer implements OnApplicationShutdown {
           provide: CHANNEL_WRAPPER,
           useFactory: async (): Promise<ChannelWrapper> => {
             const connection = new Connection({
-              uri,
-              host,
-              port,
-              username,
-              password,
-              virtualHost,
+              urls,
               ...connectionOptions,
-            } as IConnectionStringProps);
+            });
 
             const channel = connection.createChannel({
               setup: function (channel: Channel) {

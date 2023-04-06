@@ -7,59 +7,27 @@ import {
 
 import { combine } from './utils';
 
-import type {
-  IConnectionStringProps,
-  IConnectionStringAtomProps,
-} from './interface';
+import type { IConnectionAtomProps, IConnectionProps } from './interface';
 
 export class Connection {
-  #uri: string;
+  #urls: string[] = [];
   #amqpConnectionManager: AmqpConnectionManager;
 
-  constructor({
-    host,
-    port,
-    username,
-    password,
-    virtualHost,
-    ...options
-  }: IConnectionStringAtomProps);
-  constructor({ uri, ...options }: IConnectionStringProps);
-  constructor({
-    uri,
-    host,
-    port,
-    username,
-    password,
-    virtualHost,
-    ...options
-  }: IConnectionStringProps & IConnectionStringAtomProps) {
-    if (!uri) {
-      uri = combine(
-        { joinWith: '/' },
-        combine(
-          { joinWith: '@' },
-          combine(
-            { joinWith: '' },
-            'amqp://',
-            combine({ joinWith: ':' }, username, password),
-          ),
-          combine({ joinWith: ':' }, host, port.toString()),
-        ),
-        virtualHost,
-      );
+  constructor({ urls, ...options }: IConnectionProps) {
+    if (!Array.isArray(urls)) {
+      urls = [urls];
     }
 
-    this.#uri = uri;
-    this.#amqpConnectionManager = connect([uri], options);
+    this.#urls = urls.map(this.#convertUrl);
+    this.#amqpConnectionManager = connect(this.#urls, options);
   }
 
   public get connection(): AmqpConnectionManager {
     return this.#amqpConnectionManager;
   }
 
-  public get uri(): string {
-    return this.#uri;
+  public get urls(): string[] {
+    return this.#urls;
   }
 
   public createChannel({
@@ -74,5 +42,27 @@ export class Connection {
 
   public close(): Promise<void> {
     return this.#amqpConnectionManager.close();
+  }
+
+  #convertUrl(url: string | IConnectionAtomProps): string {
+    if (typeof url === 'string') {
+      return url;
+    }
+
+    const { host, port, username, password, virtualHost } = url;
+
+    return combine(
+      { joinWith: '/' },
+      combine(
+        { joinWith: '@' },
+        combine(
+          { joinWith: '' },
+          'amqp://',
+          combine({ joinWith: ':' }, username, password),
+        ),
+        combine({ joinWith: ':' }, host, port.toString()),
+      ),
+      virtualHost,
+    );
   }
 }

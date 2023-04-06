@@ -1,6 +1,6 @@
 {
   "name": "@rabbitmq-ts/core",
-  "version": "1.0.7",
+  "version": "2.0.0",
   "license": "MIT",
   "directories": {
     "lib": "lib"
@@ -14,8 +14,7 @@
     "rabbitmq-js",
     "rabbitmq-typescript",
     "rabbitmq-javascript",
-    "rabbitmq-nodejs",
-    "rabbitmq-nestjs"
+    "rabbitmq-nodejs"
   ],
   "repository": {
     "type": "git",
@@ -37,7 +36,7 @@
   },
   "dependencies": {
     "@types/amqplib": "^0.10.1",
-    "amqp-connection-manager": "^4.1.11",
+    "amqp-connection-manager": "^4.1.12",
     "amqplib": "^0.10.3"
   }
 }
