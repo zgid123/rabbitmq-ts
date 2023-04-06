@@ -7,6 +7,7 @@ import typescript from '@rollup/plugin-typescript';
 export default defineConfig({
   input: 'src/index.ts',
   plugins: [json(), resolve(), commonjs(), typescript()],
+  external: ['@types/amqplib', 'amqp-connection-manager', 'amqplib'],
   output: [
     {
       file: './lib/index.cjs',
