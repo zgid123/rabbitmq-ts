@@ -8,9 +8,7 @@ import {
   Connection,
   type Channel,
   type ChannelWrapper,
-  type TAssertExchange,
-  type IConnectionProps,
-  type AmqpConnectionManagerOptions,
+  type IProducerProps,
 } from '@rabbitmq-ts/core';
 
 import { CHANNEL_WRAPPER } from './constants';
@@ -18,29 +16,13 @@ import { RabbitMQModel } from './RabbitMQModel';
 
 import type { IChannelProps } from './RabbitMQModel';
 
-type TExchangeBaseType = 'direct' | 'topic' | 'headers' | 'fanout' | 'match';
-
-type TExchangeType = TExchangeBaseType | Omit<string, TExchangeBaseType>;
-
-interface IRegisterParams {
-  urls: IConnectionProps['urls'];
-  connectionOptions?: AmqpConnectionManagerOptions;
-  configurations?: {
-    exchanges?: {
-      exchange: string;
-      type: TExchangeType;
-      options?: TAssertExchange;
-    }[];
-  };
-}
-
 @Module({})
 export class RabbitMQProducer implements OnApplicationShutdown {
   public static register({
     urls,
     configurations = {},
     connectionOptions = {},
-  }: IRegisterParams): DynamicModule {
+  }: IProducerProps): DynamicModule {
     const { exchanges = [] } = configurations;
 
     return {

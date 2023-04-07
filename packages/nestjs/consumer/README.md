@@ -104,13 +104,13 @@ bootstrap();
 ```ts
 // rabbit.controller.ts
 import { Controller } from '@nestjs/common';
-import { Ctx, Payload, Subcribe } from '@rabbitmq-ts/nestjs-consumer';
+import { Ctx, Payload, Subscribe } from '@rabbitmq-ts/nestjs-consumer';
 
 import type { RmqContext } from '@rabbitmq-ts/nestjs-consumer';
 
 @Controller()
 export class TestController {
-  @Subcribe({
+  @Subscribe({
     routingKey: 'routing_key',
     queue: {
       name: 'queue_name',

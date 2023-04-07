@@ -49,7 +49,7 @@ export class Connection {
       return url;
     }
 
-    const { host, port, username, password, virtualHost } = url;
+    const { host, port = '', username, password, virtualHost } = url;
 
     return combine(
       { joinWith: '/' },

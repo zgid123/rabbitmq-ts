@@ -1,17 +1,11 @@
-import type { Options, Replies } from 'amqplib';
+import type { Replies } from 'amqplib';
 import type { Options as ManagerOptions } from 'amqp-connection-manager';
 
-export type TAssertExchange = Options.AssertExchange;
-
 export type TRepliesAssertExchange = Replies.AssertExchange;
-
-export type TAssertQueue = Options.AssertQueue;
 
 export type TRepliesEmpty = Replies.Empty;
 
 export type TPublish = ManagerOptions.Publish;
-
-export type TConsumeOptions = ManagerOptions.Consume;
 
 export type { Channel, ConsumeMessage } from 'amqplib';
 
@@ -22,4 +16,12 @@ export type {
 
 export * from './Connection';
 
-export type { IConnectionProps } from './interface';
+export type {
+  TAssertQueue,
+  TExchangeType,
+  IProducerProps,
+  TAssertExchange,
+  TConsumeOptions,
+  ISubscribeParams,
+  IConnectionProps,
+} from './interface';

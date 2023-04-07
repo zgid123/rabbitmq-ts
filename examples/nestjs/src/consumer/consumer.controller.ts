@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import {
   Ctx,
   Payload,
-  Subcribe,
+  Subscribe,
   type RmqContext,
 } from '@rabbitmq-ts/nestjs-consumer';
 
@@ -14,7 +14,7 @@ interface IPayloadProps {
 
 @Controller()
 export class ConsumerController {
-  @Subcribe({
+  @Subscribe({
     routingKey: ROUTE,
     queue: {
       exclusive: true,
@@ -30,7 +30,7 @@ export class ConsumerController {
       noAck: true,
     },
   })
-  public async handleSubcribe(
+  public async handleSubscribe(
     @Payload() data: IPayloadProps,
     @Ctx() context: RmqContext,
   ): Promise<string> {

@@ -10,13 +10,12 @@ import {
   type ChannelWrapper,
   type ConsumeMessage,
   type IConnectionProps,
+  type ISubscribeParams,
   type TRepliesAssertExchange,
 } from '@rabbitmq-ts/core';
 
 import { omit } from './utils';
 import { RmqContext } from './Context';
-
-import type { ISubcribeParams } from './decorators';
 
 type TCallback = () => void;
 
@@ -29,7 +28,7 @@ export class RabbitMQConsumer
   implements CustomTransportStrategy
 {
   #connection: Connection;
-  #patterns: ISubcribeParams[] = [];
+  #patterns: ISubscribeParams[] = [];
   #channel: ChannelWrapper | undefined;
 
   constructor(props: IConnectionProps) {
@@ -47,13 +46,13 @@ export class RabbitMQConsumer
   }
 
   public addHandler(
-    pattern: ISubcribeParams & { isRabbitMQ: boolean },
+    pattern: ISubscribeParams & { isRabbitMQ: boolean },
     callback: MessageHandler,
     isEventHandler = false,
     extras: Record<string, any> = {},
   ) {
     if (typeof pattern === 'object' && pattern.isRabbitMQ) {
-      pattern = omit(pattern, ['isRabbitMQ']) as ISubcribeParams & {
+      pattern = omit(pattern, ['isRabbitMQ']) as ISubscribeParams & {
         isRabbitMQ: boolean;
       };
 
@@ -131,7 +130,7 @@ export class RabbitMQConsumer
   async #handleMessage(
     message: ConsumeMessage,
     channel: Channel,
-    pattern: ISubcribeParams,
+    pattern: ISubscribeParams,
   ): Promise<void> {
     const { content } = message;
     let rawMessage = content.toString();
