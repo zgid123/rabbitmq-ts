@@ -1,0 +1,49 @@
+{
+  "name": "@rabbitmq-ts/fastify-consumer",
+  "version": "1.0.0",
+  "license": "MIT",
+  "directories": {
+    "lib": "lib"
+  },
+  "author": "Alpha",
+  "description": "Fastify package for consumer",
+  "homepage": "https://github.com/zgid123/rabbitmq-ts",
+  "keywords": [
+    "rabbitmq",
+    "rabbitmq-ts",
+    "rabbitmq-js",
+    "rabbitmq-typescript",
+    "rabbitmq-javascript",
+    "rabbitmq-nodejs",
+    "rabbitmq-fastify",
+    "rabbitmq-consumer"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zgid123/rabbitmq-ts"
+  },
+  "main": "./lib/index.cjs",
+  "module": "./lib/index.mjs",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.cjs",
+      "types": "./lib/index.d.ts"
+    }
+  },
+  "scripts": {
+    "prepublish": "pnpm build",
+    "build": "rollup --config rollup.config.ts --configPlugin typescript && pnpm append-dts",
+    "append-dts": "cat src/index.d.ts >> lib/index.d.ts"
+  },
+  "dependencies": {
+    "@rabbitmq-ts/core": "workspace:*",
+    "fastify-plugin": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "18.15.11",
+    "fastify": "^4.15.0",
+    "fastify-tsconfig": "^1.0.1"
+  }
+}

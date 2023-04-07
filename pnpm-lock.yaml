@@ -90,6 +90,21 @@ importers:
       amqp-connection-manager: 4.1.12_amqplib@0.10.3
       amqplib: 0.10.3
 
+  packages/fastify/consumer:
+    specifiers:
+      '@rabbitmq-ts/core': workspace:*
+      '@types/node': 18.15.11
+      fastify: ^4.15.0
+      fastify-plugin: ^4.5.0
+      fastify-tsconfig: ^1.0.1
+    dependencies:
+      '@rabbitmq-ts/core': link:../../core
+      fastify-plugin: 4.5.0
+    devDependencies:
+      '@types/node': 18.15.11
+      fastify: 4.15.0
+      fastify-tsconfig: 1.0.1
+
   packages/fastify/producer:
     specifiers:
       '@rabbitmq-ts/core': workspace:*
