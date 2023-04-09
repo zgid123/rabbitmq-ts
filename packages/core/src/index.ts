@@ -16,6 +16,8 @@ export type {
 
 export * from './Connection';
 
+export { parseMessage } from './utils';
+
 export type {
   TAssertQueue,
   TExchangeType,

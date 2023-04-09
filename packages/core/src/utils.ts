@@ -1,3 +1,5 @@
+import type { ConsumeMessage } from 'amqplib';
+
 interface ICombineOptionsProps {
   joinWith: string;
 }
@@ -21,4 +23,21 @@ export function combine(
   const { joinWith } = options;
 
   return compact(params).join(joinWith);
+}
+
+export function parseMessage(message: ConsumeMessage | null): unknown {
+  if (!message) {
+    return message;
+  }
+
+  const { content } = message;
+  let rawMessage = content.toString();
+
+  try {
+    rawMessage = JSON.parse(rawMessage);
+  } catch {
+    // do nothing
+  }
+
+  return rawMessage;
 }
