@@ -13,6 +13,7 @@
   "dependencies": {
     "@nestjs/common": "^9.4.0",
     "@nestjs/core": "^9.4.0",
+    "@nestjs/microservices": "^9.4.0",
     "@nestjs/platform-express": "^9.4.0",
     "@rabbitmq-ts/nestjs-consumer": "workspace:*",
     "@rabbitmq-ts/nestjs-producer": "workspace:*",

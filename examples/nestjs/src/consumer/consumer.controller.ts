@@ -35,7 +35,9 @@ export class ConsumerController {
     @Ctx() context: RmqContext,
   ): Promise<string> {
     console.log('data', data);
-    console.log('context', context);
+    console.log('context.getChannel()', context.getChannel());
+    console.log('context.getMessage()', context.getMessage());
+    console.log('context.getPattern()', context.getPattern());
 
     return 'Ok!';
   }

@@ -1,10 +1,7 @@
-import {
-  Server,
-  type MessageHandler,
-  type CustomTransportStrategy,
-} from '@nestjs/microservices';
+import { Logger } from '@nestjs/common';
 import {
   Connection,
+  parseMessage,
   type Channel,
   type TRepliesEmpty,
   type ChannelWrapper,
@@ -14,8 +11,8 @@ import {
   type TRepliesAssertExchange,
 } from '@rabbitmq-ts/core';
 
-import { omit } from './utils';
 import { RmqContext } from './Context';
+import { normalizePattern, omit } from './utils';
 
 type TCallback = () => void;
 
@@ -23,17 +20,18 @@ interface ICreateServiceReturnProps {
   strategy: RabbitMQConsumer;
 }
 
-export class RabbitMQConsumer
-  extends Server
-  implements CustomTransportStrategy
-{
+interface IMessageHandlerProps<TData = unknown, TResult = unknown> {
+  (data: TData, ctx?: RmqContext): Promise<TResult>;
+}
+
+export class RabbitMQConsumer {
   #connection: Connection;
   #patterns: ISubscribeParams[] = [];
   #channel: ChannelWrapper | undefined;
+  #logger = new Logger('RabbitMQConsumer');
+  #messageHandlers = new Map<string, IMessageHandlerProps>();
 
   constructor(props: IConnectionProps) {
-    super();
-
     this.#connection = new Connection(props);
   }
 
@@ -47,9 +45,9 @@ export class RabbitMQConsumer
 
   public addHandler(
     pattern: ISubscribeParams & { isRabbitMQ: boolean },
-    callback: MessageHandler,
-    isEventHandler = false,
-    extras: Record<string, any> = {},
+    callback: IMessageHandlerProps,
+    _isEventHandler = false,
+    _extras: Record<string, any> = {},
   ) {
     if (typeof pattern === 'object' && pattern.isRabbitMQ) {
       pattern = omit(pattern, ['isRabbitMQ']) as ISubscribeParams & {
@@ -59,7 +57,8 @@ export class RabbitMQConsumer
       this.#patterns.push(pattern);
     }
 
-    super.addHandler(pattern, callback, isEventHandler, extras);
+    const normalizedPattern = normalizePattern(pattern);
+    this.#messageHandlers.set(normalizedPattern, callback);
   }
 
   public listen(callback: TCallback) {
@@ -106,11 +105,7 @@ export class RabbitMQConsumer
             channel.consume(
               queueName,
               (message) => {
-                return handleMessage(
-                  message as ConsumeMessage,
-                  channel,
-                  pattern,
-                );
+                return handleMessage(message, channel, pattern);
               },
               consumerOptions,
             ),
@@ -122,32 +117,35 @@ export class RabbitMQConsumer
     callback();
   }
 
-  public close() {
-    this.#channel?.close();
-    this.#connection.close();
+  public async close() {
+    await this.#channel?.close();
+    await this.#connection.close();
   }
 
   async #handleMessage(
-    message: ConsumeMessage,
+    message: ConsumeMessage | null,
     channel: Channel,
     pattern: ISubscribeParams,
-  ): Promise<void> {
-    const { content } = message;
-    let rawMessage = content.toString();
-
-    try {
-      rawMessage = JSON.parse(rawMessage);
-    } catch {
-      // do nothing
+  ): Promise<unknown> {
+    if (message === null) {
+      return;
     }
 
-    const packet = {
-      pattern,
-      data: rawMessage,
-    };
-    const patternAsString = JSON.stringify(pattern);
-    const rmqContext = new RmqContext([message, channel, patternAsString]);
+    const rawMessage = parseMessage(message);
+    const patternAsString = normalizePattern(pattern);
+    const rmqContext = new RmqContext({
+      message,
+      channel,
+      pattern: patternAsString,
+    });
+    const handler = this.#messageHandlers.get(patternAsString);
 
-    return this.handleEvent(patternAsString, packet, rmqContext);
+    if (!handler) {
+      return this.#logger.error(
+        `There is no matching event handler defined in the consumer. Event pattern: ${patternAsString}`,
+      );
+    }
+
+    return handler(rawMessage, rmqContext);
   }
 }

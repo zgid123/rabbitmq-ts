@@ -1,23 +1,27 @@
-import { BaseRpcContext } from '@nestjs/microservices';
-
 import type { Channel } from '@rabbitmq-ts/core';
 
-type TRqmContextArgs = [Record<string, any>, Channel, string];
+interface IRabbitMQContextProps {
+  pattern: string;
+  channel: Channel;
+  message: Record<string, any>;
+}
 
-export class RmqContext extends BaseRpcContext<TRqmContextArgs> {
-  constructor(args: TRqmContextArgs) {
-    super(args);
+export class RmqContext {
+  #context: IRabbitMQContextProps;
+
+  constructor(context: IRabbitMQContextProps) {
+    this.#context = context;
   }
 
   public getMessage<T extends Record<string, any> = Record<string, any>>(): T {
-    return this.args[0] as T;
+    return this.#context.message as T;
   }
 
   public getChannel(): Channel {
-    return this.args[1];
+    return this.#context.channel;
   }
 
   public getPattern(): string {
-    return this.args[2];
+    return this.#context.pattern;
   }
 }

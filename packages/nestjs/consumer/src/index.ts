@@ -1,6 +1,3 @@
-export { Ctx, Payload } from '@nestjs/microservices';
-
-export { Subscribe } from './decorators';
-
 export * from './Context';
+export { Subscribe, Ctx, Payload } from './decorators';
 export * from './RabbitMQConsumer';
