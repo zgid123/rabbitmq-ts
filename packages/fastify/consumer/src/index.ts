@@ -1,9 +1,9 @@
 import fp from 'fastify-plugin';
 import {
   Connection,
+  parseMessage,
   type Channel,
   type TRepliesEmpty,
-  type ConsumeMessage,
   type IConnectionProps,
   type TRepliesAssertExchange,
 } from '@rabbitmq-ts/core';
@@ -11,23 +11,6 @@ import {
 import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 
 import type { TSubscribeFunc } from './interface';
-
-function handleMessage(message: ConsumeMessage | null): unknown {
-  if (!message) {
-    return message;
-  }
-
-  const { content } = message;
-  let rawMessage = content.toString();
-
-  try {
-    rawMessage = JSON.parse(rawMessage);
-  } catch {
-    // do nothing
-  }
-
-  return rawMessage;
-}
 
 const rabbitMQConsumer: FastifyPluginAsync<IConnectionProps> = async (
   fastify: FastifyInstance,
@@ -80,7 +63,7 @@ const rabbitMQConsumer: FastifyPluginAsync<IConnectionProps> = async (
       channel.consume(
         queueName,
         (message) => {
-          const data = handleMessage(message);
+          const data = parseMessage(message);
 
           return impl(data, channel);
         },
@@ -96,11 +79,12 @@ const rabbitMQConsumer: FastifyPluginAsync<IConnectionProps> = async (
   fastify.addHook('onClose', onClose);
 
   function onClose() {
+    channel.close();
     connection.close();
   }
 };
 
 export default fp(rabbitMQConsumer, {
   fastify: '>=3',
-  name: '@@rabbitmq-ts/fastify-consumer',
+  name: '@rabbitmq-ts/fastify-consumer',
 });

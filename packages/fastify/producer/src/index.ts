@@ -57,5 +57,5 @@ const rabbitMQProducer: FastifyPluginAsync<IProducerProps> = async (
 
 export default fp(rabbitMQProducer, {
   fastify: '>=3',
-  name: '@@rabbitmq-ts/fastify-producer',
+  name: '@rabbitmq-ts/fastify-producer',
 });

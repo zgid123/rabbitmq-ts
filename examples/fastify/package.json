@@ -20,6 +20,6 @@
     "@fastify/vite": "^4.0.0",
     "@types/detect-port": "^1.3.2",
     "fastify-cli": "^5.7.1",
-    "vite-node": "^0.29.8"
+    "vite-node": "^0.30.0"
   }
 }
